@@ -91,40 +91,33 @@ Wikipedia says
 
 First of all we have a door interface and the implementation
 ```php
-interface Door
-{
+interface Door {
     public function getWidth(): float;
     public function getHeight(): float;
 }
 
-class WoodenDoor implements Door
-{
+class WoodenDoor implements Door {
     protected $width;
     protected $height;
 
-    public function __construct(float $width, float $height)
-    {
+    public function __construct(float $width, float $height) {
         $this->width = $width;
         $this->height = $height;
     }
 
-    public function getWidth(): float
-    {
+    public function getWidth(): float {
         return $this->width;
     }
 
-    public function getHeight(): float
-    {
+    public function getHeight(): float {
         return $this->height;
     }
 }
 ```
 Then we have our door factory that makes the door and returns it
 ```php
-class DoorFactory
-{
-    public static function makeDoor($width, $height): Door
-    {
+class DoorFactory {
+    public static function makeDoor($width, $height): Door {
         return new WoodenDoor($width, $height);
     }
 }
@@ -162,23 +155,18 @@ Wikipedia says
 Taking our hiring manager example above. First of all we have an interviewer interface and some implementations for it
 
 ```php
-interface Interviewer
-{
+interface Interviewer {
     public function askQuestions();
 }
 
-class Developer implements Interviewer
-{
-    public function askQuestions()
-    {
+class Developer implements Interviewer {
+    public function askQuestions() {
         echo 'Asking about design patterns!';
     }
 }
 
-class CommunityExecutive implements Interviewer
-{
-    public function askQuestions()
-    {
+class CommunityExecutive implements Interviewer {
+    public function askQuestions() {
         echo 'Asking about community building';
     }
 }
@@ -187,14 +175,12 @@ class CommunityExecutive implements Interviewer
 Now let us create our `HiringManager`
 
 ```php
-abstract class HiringManager
-{
+abstract class HiringManager {
 
     // Factory method
     abstract protected function makeInterviewer(): Interviewer;
 
-    public function takeInterview()
-    {
+    public function takeInterview() {
         $interviewer = $this->makeInterviewer();
         $interviewer->askQuestions();
     }
@@ -203,18 +189,14 @@ abstract class HiringManager
 ```
 Now any child can extend it and provide the required interviewer
 ```php
-class DevelopmentManager extends HiringManager
-{
-    protected function makeInterviewer(): Interviewer
-    {
+class DevelopmentManager extends HiringManager {
+    protected function makeInterviewer(): Interviewer {
         return new Developer();
     }
 }
 
-class MarketingManager extends HiringManager
-{
-    protected function makeInterviewer(): Interviewer
-    {
+class MarketingManager extends HiringManager {
+    protected function makeInterviewer(): Interviewer {
         return new CommunityExecutive();
     }
 }
@@ -250,23 +232,18 @@ Wikipedia says
 Translating the door example above. First of all we have our `Door` interface and some implementation for it
 
 ```php
-interface Door
-{
+interface Door {
     public function getDescription();
 }
 
-class WoodenDoor implements Door
-{
-    public function getDescription()
-    {
+class WoodenDoor implements Door {
+    public function getDescription() {
         echo 'I am a wooden door';
     }
 }
 
-class IronDoor implements Door
-{
-    public function getDescription()
-    {
+class IronDoor implements Door {
+    public function getDescription() {
         echo 'I am an iron door';
     }
 }
@@ -274,23 +251,18 @@ class IronDoor implements Door
 Then we have some fitting experts for each door type
 
 ```php
-interface DoorFittingExpert
-{
+interface DoorFittingExpert {
     public function getDescription();
 }
 
-class Welder implements DoorFittingExpert
-{
-    public function getDescription()
-    {
+class Welder implements DoorFittingExpert {
+    public function getDescription() {
         echo 'I can only fit iron doors';
     }
 }
 
-class Carpenter implements DoorFittingExpert
-{
-    public function getDescription()
-    {
+class Carpenter implements DoorFittingExpert {
+    public function getDescription() {
         echo 'I can only fit wooden doors';
     }
 }
@@ -298,36 +270,29 @@ class Carpenter implements DoorFittingExpert
 
 Now we have our abstract factory that would let us make family of related objects i.e. wooden door factory would create a wooden door and wooden door fitting expert and iron door factory would create an iron door and iron door fitting expert
 ```php
-interface DoorFactory
-{
+interface DoorFactory {
     public function makeDoor(): Door;
     public function makeFittingExpert(): DoorFittingExpert;
 }
 
 // Wooden factory to return carpenter and wooden door
-class WoodenDoorFactory implements DoorFactory
-{
-    public function makeDoor(): Door
-    {
+class WoodenDoorFactory implements DoorFactory {
+    public function makeDoor(): Door {
         return new WoodenDoor();
     }
 
-    public function makeFittingExpert(): DoorFittingExpert
-    {
+    public function makeFittingExpert(): DoorFittingExpert {
         return new Carpenter();
     }
 }
 
 // Iron door factory to get iron door and the relevant fitting expert
-class IronDoorFactory implements DoorFactory
-{
-    public function makeDoor(): Door
-    {
+class IronDoorFactory implements DoorFactory {
+    public function makeDoor(): Door {
         return new IronDoor();
     }
 
-    public function makeFittingExpert(): DoorFittingExpert
-    {
+    public function makeFittingExpert(): DoorFittingExpert {
         return new Welder();
     }
 }
@@ -372,8 +337,7 @@ Wikipedia says
 Having said that let me add a bit about what telescoping constructor anti-pattern is. At one point or the other we have all seen a constructor like below:
 
 ```php
-public function __construct($size, $cheese = true, $pepperoni = true, $tomato = false, $lettuce = true)
-{
+public function __construct($size, $cheese = true, $pepperoni = true, $tomato = false, $lettuce = true) {
 }
 ```
 
@@ -384,8 +348,7 @@ As you can see; the number of constructor parameters can quickly get out of hand
 The sane alternative is to use the builder pattern. First of all we have our burger that we want to make
 
 ```php
-class Burger
-{
+class Burger {
     protected $size;
 
     protected $cheese = false;
@@ -393,8 +356,7 @@ class Burger
     protected $lettuce = false;
     protected $tomato = false;
 
-    public function __construct(BurgerBuilder $builder)
-    {
+    public function __construct(BurgerBuilder $builder) {
         $this->size = $builder->size;
         $this->cheese = $builder->cheese;
         $this->pepperoni = $builder->pepperoni;
@@ -407,8 +369,7 @@ class Burger
 And then we have the builder
 
 ```php
-class BurgerBuilder
-{
+class BurgerBuilder {
     public $size;
 
     public $cheese = false;
@@ -416,37 +377,31 @@ class BurgerBuilder
     public $lettuce = false;
     public $tomato = false;
 
-    public function __construct(int $size)
-    {
+    public function __construct(int $size) {
         $this->size = $size;
     }
 
-    public function addPepperoni()
-    {
+    public function addPepperoni() {
         $this->pepperoni = true;
         return $this;
     }
 
-    public function addLettuce()
-    {
+    public function addLettuce() {
         $this->lettuce = true;
         return $this;
     }
 
-    public function addCheese()
-    {
+    public function addCheese() {
         $this->cheese = true;
         return $this;
     }
 
-    public function addTomato()
-    {
+    public function addTomato() {
         $this->tomato = true;
         return $this;
     }
 
-    public function build(): Burger
-    {
+    public function build(): Burger {
         return new Burger($this);
     }
 }
@@ -483,34 +438,28 @@ In short, it allows you to create a copy of an existing object and modify it to 
 In PHP, it can be easily done using `clone`
 
 ```php
-class Sheep
-{
+class Sheep {
     protected $name;
     protected $category;
 
-    public function __construct(string $name, string $category = 'Mountain Sheep')
-    {
+    public function __construct(string $name, string $category = 'Mountain Sheep') {
         $this->name = $name;
         $this->category = $category;
     }
 
-    public function setName(string $name)
-    {
+    public function setName(string $name) {
         $this->name = $name;
     }
 
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
 
-    public function setCategory(string $category)
-    {
+    public function setCategory(string $category) {
         $this->category = $category;
     }
 
-    public function getCategory()
-    {
+    public function getCategory() {
         return $this->category;
     }
 }
@@ -551,17 +500,14 @@ Singleton pattern is actually considered an anti-pattern and overuse of it shoul
 
 To create a singleton, make the constructor private, disable cloning, disable extension and create a static variable to house the instance
 ```php
-final class President
-{
+final class President {
     private static $instance;
 
-    private function __construct()
-    {
+    private function __construct() {
         // Hide the constructor
     }
 
-    public static function getInstance(): President
-    {
+    public static function getInstance(): President {
         if (!self::$instance) {
             self::$instance = new self();
         }
@@ -569,13 +515,11 @@ final class President
         return self::$instance;
     }
 
-    private function __clone()
-    {
+    private function __clone() {
         // Disable cloning
     }
 
-    private function __wakeup()
-    {
+    private function __wakeup() {
         // Disable unserialize
     }
 }
@@ -624,31 +568,24 @@ Consider a game where there is a hunter and he hunts lions.
 First we have an interface `Lion` that all types of lions have to implement
 
 ```php
-interface Lion
-{
+interface Lion {
     public function roar();
 }
 
-class AfricanLion implements Lion
-{
-    public function roar()
-    {
+class AfricanLion implements Lion {
+    public function roar() {
     }
 }
 
-class AsianLion implements Lion
-{
-    public function roar()
-    {
+class AsianLion implements Lion {
+    public function roar() {
     }
 }
 ```
 And hunter expects any implementation of `Lion` interface to hunt.
 ```php
-class Hunter
-{
-    public function hunt(Lion $lion)
-    {
+class Hunter {
+    public function hunt(Lion $lion) {
         $lion->roar();
     }
 }
@@ -658,25 +595,20 @@ Now let's say we have to add a `WildDog` in our game so that hunter can hunt tha
 
 ```php
 // This needs to be added to the game
-class WildDog
-{
-    public function bark()
-    {
+class WildDog {
+    public function bark() {
     }
 }
 
 // Adapter around wild dog to make it compatible with our game
-class WildDogAdapter implements Lion
-{
+class WildDogAdapter implements Lion {
     protected $dog;
 
-    public function __construct(WildDog $dog)
-    {
+    public function __construct(WildDog $dog) {
         $this->dog = $dog;
     }
 
-    public function roar()
-    {
+    public function roar() {
         $this->dog->bark();
     }
 }
@@ -709,38 +641,31 @@ Wikipedia says
 Translating our WebPage example from above. Here we have the `WebPage` hierarchy
 
 ```php
-interface WebPage
-{
+interface WebPage {
     public function __construct(Theme $theme);
     public function getContent();
 }
 
-class About implements WebPage
-{
+class About implements WebPage {
     protected $theme;
 
-    public function __construct(Theme $theme)
-    {
+    public function __construct(Theme $theme) {
         $this->theme = $theme;
     }
 
-    public function getContent()
-    {
+    public function getContent() {
         return "About page in " . $this->theme->getColor();
     }
 }
 
-class Careers implements WebPage
-{
+class Careers implements WebPage {
     protected $theme;
 
-    public function __construct(Theme $theme)
-    {
+    public function __construct(Theme $theme) {
         $this->theme = $theme;
     }
 
-    public function getContent()
-    {
+    public function getContent() {
         return "Careers page in " . $this->theme->getColor();
     }
 }
@@ -748,29 +673,22 @@ class Careers implements WebPage
 And the separate theme hierarchy
 ```php
 
-interface Theme
-{
+interface Theme {
     public function getColor();
 }
 
-class DarkTheme implements Theme
-{
-    public function getColor()
-    {
+class DarkTheme implements Theme {
+    public function getColor() {
         return 'Dark Black';
     }
 }
-class LightTheme implements Theme
-{
-    public function getColor()
-    {
+class LightTheme implements Theme {
+    public function getColor() {
         return 'Off white';
     }
 }
-class AquaTheme implements Theme
-{
-    public function getColor()
-    {
+class AquaTheme implements Theme {
+    public function getColor() {
         return 'Light blue';
     }
 }
@@ -803,8 +721,7 @@ Wikipedia says
 Taking our employees example from above. Here we have different employee types
 
 ```php
-interface Employee
-{
+interface Employee {
     public function __construct(string $name, float $salary);
     public function getName(): string;
     public function setSalary(float $salary);
@@ -812,68 +729,56 @@ interface Employee
     public function getRoles(): array;
 }
 
-class Developer implements Employee
-{
+class Developer implements Employee {
     protected $salary;
     protected $name;
     protected $roles;
     
-    public function __construct(string $name, float $salary)
-    {
+    public function __construct(string $name, float $salary) {
         $this->name = $name;
         $this->salary = $salary;
     }
 
-    public function getName(): string
-    {
+    public function getName(): string {
         return $this->name;
     }
 
-    public function setSalary(float $salary)
-    {
+    public function setSalary(float $salary) {
         $this->salary = $salary;
     }
 
-    public function getSalary(): float
-    {
+    public function getSalary(): float {
         return $this->salary;
     }
 
-    public function getRoles(): array
-    {
+    public function getRoles(): array {
         return $this->roles;
     }
 }
 
-class Designer implements Employee
-{
+class Designer implements Employee {
     protected $salary;
     protected $name;
     protected $roles;
 
-    public function __construct(string $name, float $salary)
-    {
+    public function __construct(string $name, float $salary) {
         $this->name = $name;
         $this->salary = $salary;
     }
 
-    public function getName(): string
-    {
+    public function getName(): string {
         return $this->name;
     }
 
-    public function setSalary(float $salary)
-    {
+    public function setSalary(float $salary) {
         $this->salary = $salary;
     }
 
-    public function getSalary(): float
-    {
+    public function getSalary(): float {
         return $this->salary;
     }
 
-    public function getRoles(): array
-    {
+    public function getRoles(): array {
         return $this->roles;
     }
 }
@@ -882,17 +787,14 @@ class Designer implements Employee
 Then we have an organization which consists of several different types of employees
 
 ```php
-class Organization
-{
+class Organization {
     protected $employees;
 
-    public function addEmployee(Employee $employee)
-    {
+    public function addEmployee(Employee $employee) {
         $this->employees[] = $employee;
     }
 
-    public function getNetSalaries(): float
-    {
+    public function getNetSalaries(): float {
         $netSalary = 0;
 
         foreach ($this->employees as $employee) {
@@ -937,83 +839,67 @@ Wikipedia says
 Lets take coffee for example. First of all we have a simple coffee implementing the coffee interface
 
 ```php
-interface Coffee
-{
+interface Coffee {
     public function getCost();
     public function getDescription();
 }
 
-class SimpleCoffee implements Coffee
-{
-    public function getCost()
-    {
+class SimpleCoffee implements Coffee {
+    public function getCost() {
         return 10;
     }
 
-    public function getDescription()
-    {
+    public function getDescription() {
         return 'Simple coffee';
     }
 }
 ```
 We want to make the code extensible to allow options to modify it if required. Lets make some add-ons (decorators)
 ```php
-class MilkCoffee implements Coffee
-{
+class MilkCoffee implements Coffee {
     protected $coffee;
 
-    public function __construct(Coffee $coffee)
-    {
+    public function __construct(Coffee $coffee) {
         $this->coffee = $coffee;
     }
 
-    public function getCost()
-    {
+    public function getCost() {
         return $this->coffee->getCost() + 2;
     }
 
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->coffee->getDescription() . ', milk';
     }
 }
 
-class WhipCoffee implements Coffee
-{
+class WhipCoffee implements Coffee {
     protected $coffee;
 
-    public function __construct(Coffee $coffee)
-    {
+    public function __construct(Coffee $coffee) {
         $this->coffee = $coffee;
     }
 
-    public function getCost()
-    {
+    public function getCost() {
         return $this->coffee->getCost() + 5;
     }
 
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->coffee->getDescription() . ', whip';
     }
 }
 
-class VanillaCoffee implements Coffee
-{
+class VanillaCoffee implements Coffee {
     protected $coffee;
 
-    public function __construct(Coffee $coffee)
-    {
+    public function __construct(Coffee $coffee) {
         $this->coffee = $coffee;
     }
 
-    public function getCost()
-    {
+    public function getCost() {
         return $this->coffee->getCost() + 3;
     }
 
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->coffee->getDescription() . ', vanilla';
     }
 }
@@ -1056,65 +942,53 @@ Wikipedia says
 Taking our computer example from above. Here we have the computer class
 
 ```php
-class Computer
-{
-    public function getElectricShock()
-    {
+class Computer {
+    public function getElectricShock() {
         echo "Ouch!";
     }
 
-    public function makeSound()
-    {
+    public function makeSound() {
         echo "Beep beep!";
     }
 
-    public function showLoadingScreen()
-    {
+    public function showLoadingScreen() {
         echo "Loading..";
     }
 
-    public function bam()
-    {
+    public function bam() {
         echo "Ready to be used!";
     }
 
-    public function closeEverything()
-    {
+    public function closeEverything() {
         echo "Bup bup bup buzzzz!";
     }
 
-    public function sooth()
-    {
+    public function sooth() {
         echo "Zzzzz";
     }
 
-    public function pullCurrent()
-    {
+    public function pullCurrent() {
         echo "Haaah!";
     }
 }
 ```
 Here we have the facade
 ```php
-class ComputerFacade
-{
+class ComputerFacade {
     protected $computer;
 
-    public function __construct(Computer $computer)
-    {
+    public function __construct(Computer $computer) {
         $this->computer = $computer;
     }
 
-    public function turnOn()
-    {
+    public function turnOn() {
         $this->computer->getElectricShock();
         $this->computer->makeSound();
         $this->computer->showLoadingScreen();
         $this->computer->bam();
     }
 
-    public function turnOff()
-    {
+    public function turnOff() {
         $this->computer->closeEverything();
         $this->computer->pullCurrent();
         $this->computer->sooth();
@@ -1147,17 +1021,14 @@ Translating our tea example from above. First of all we have tea types and tea m
 ```php
 // Anything that will be cached is flyweight.
 // Types of tea here will be flyweights.
-class KarakTea
-{
+class KarakTea {
 }
 
 // Acts as a factory and saves the tea
-class TeaMaker
-{
+class TeaMaker {
     protected $availableTea = [];
 
-    public function make($preference)
-    {
+    public function make($preference) {
         if (empty($this->availableTea[$preference])) {
             $this->availableTea[$preference] = new KarakTea();
         }
@@ -1170,23 +1041,19 @@ class TeaMaker
 Then we have the `TeaShop` which takes orders and serves them
 
 ```php
-class TeaShop
-{
+class TeaShop {
     protected $orders;
     protected $teaMaker;
 
-    public function __construct(TeaMaker $teaMaker)
-    {
+    public function __construct(TeaMaker $teaMaker) {
         $this->teaMaker = $teaMaker;
     }
 
-    public function takeOrder(string $teaType, int $table)
-    {
+    public function takeOrder(string $teaType, int $table) {
         $this->orders[$table] = $this->teaMaker->make($teaType);
     }
 
-    public function serve()
-    {
+    public function serve() {
         foreach ($this->orders as $table => $tea) {
             echo "Serving tea to table# " . $table;
         }
@@ -1225,38 +1092,31 @@ Wikipedia says
 Taking our security door example from above. Firstly we have the door interface and an implementation of door
 
 ```php
-interface Door
-{
+interface Door {
     public function open();
     public function close();
 }
 
-class LabDoor implements Door
-{
-    public function open()
-    {
+class LabDoor implements Door {
+    public function open() {
         echo "Opening lab door";
     }
 
-    public function close()
-    {
+    public function close() {
         echo "Closing the lab door";
     }
 }
 ```
 Then we have a proxy to secure any doors that we want
 ```php
-class SecuredDoor implements Door
-{
+class SecuredDoor implements Door {
     protected $door;
 
-    public function __construct(Door $door)
-    {
+    public function __construct(Door $door) {
         $this->door = $door;
     }
 
-    public function open($password)
-    {
+    public function open($password) {
         if ($this->authenticate($password)) {
             $this->door->open();
         } else {
@@ -1264,13 +1124,11 @@ class SecuredDoor implements Door
         }
     }
 
-    public function authenticate($password)
-    {
+    public function authenticate($password) {
         return $password === '$ecr@t';
     }
 
-    public function close()
-    {
+    public function close() {
         $this->door->close();
     }
 }
@@ -1322,18 +1180,15 @@ Wikipedia says
 Translating our account example above. First of all we have a base account having the logic for chaining the accounts together and some accounts
 
 ```php
-abstract class Account
-{
+abstract class Account {
     protected $successor;
     protected $balance;
 
-    public function setNext(Account $account)
-    {
+    public function setNext(Account $account) {
         $this->successor = $account;
     }
 
-    public function pay(float $amountToPay)
-    {
+    public function pay(float $amountToPay) {
         if ($this->canPay($amountToPay)) {
             echo sprintf('Paid %s using %s' . PHP_EOL, $amountToPay, get_called_class());
         } elseif ($this->successor) {
@@ -1344,38 +1199,31 @@ abstract class Account
         }
     }
 
-    public function canPay($amount): bool
-    {
+    public function canPay($amount): bool {
         return $this->balance >= $amount;
     }
 }
 
-class Bank extends Account
-{
+class Bank extends Account {
     protected $balance;
 
-    public function __construct(float $balance)
-    {
+    public function __construct(float $balance) {
         $this->balance = $balance;
     }
 }
 
-class Paypal extends Account
-{
+class Paypal extends Account {
     protected $balance;
 
-    public function __construct(float $balance)
-    {
+    public function __construct(float $balance) {
         $this->balance = $balance;
     }
 }
 
-class Bitcoin extends Account
-{
+class Bitcoin extends Account {
     protected $balance;
 
-    public function __construct(float $balance)
-    {
+    public function __construct(float $balance) {
         $this->balance = $balance;
     }
 }
@@ -1426,75 +1274,61 @@ Wikipedia says
 First of all we have the receiver that has the implementation of every action that could be performed
 ```php
 // Receiver
-class Bulb
-{
-    public function turnOn()
-    {
+class Bulb {
+    public function turnOn() {
         echo "Bulb has been lit";
     }
 
-    public function turnOff()
-    {
+    public function turnOff() {
         echo "Darkness!";
     }
 }
 ```
 then we have an interface that each of the commands are going to implement and then we have a set of commands
 ```php
-interface Command
-{
+interface Command {
     public function execute();
     public function undo();
     public function redo();
 }
 
 // Command
-class TurnOn implements Command
-{
+class TurnOn implements Command {
     protected $bulb;
 
-    public function __construct(Bulb $bulb)
-    {
+    public function __construct(Bulb $bulb) {
         $this->bulb = $bulb;
     }
 
-    public function execute()
-    {
+    public function execute() {
         $this->bulb->turnOn();
     }
 
-    public function undo()
-    {
+    public function undo() {
         $this->bulb->turnOff();
     }
 
-    public function redo()
-    {
+    public function redo() {
         $this->execute();
     }
 }
 
-class TurnOff implements Command
-{
+class TurnOff implements Command {
     protected $bulb;
 
-    public function __construct(Bulb $bulb)
-    {
+    public function __construct(Bulb $bulb) {
         $this->bulb = $bulb;
     }
 
-    public function execute()
-    {
+    public function execute() {
         $this->bulb->turnOff();
     }
 
-    public function undo()
-    {
+    public function undo() {
         $this->bulb->turnOn();
     }
 
-    public function redo()
-    {
+    public function redo() {
         $this->execute();
     }
 }
@@ -1502,10 +1336,8 @@ class TurnOff implements Command
 Then we have an `Invoker` with whom the client will interact to process any commands
 ```php
 // Invoker
-class RemoteControl
-{
-    public function submit(Command $command)
-    {
+class RemoteControl {
+    public function submit(Command $command) {
         $command->execute();
     }
 }
@@ -1541,17 +1373,14 @@ Wikipedia says
 In PHP it is quite easy to implement using SPL (Standard PHP Library). Translating our radio stations example from above. First of all we have `RadioStation`
 
 ```php
-class RadioStation
-{
+class RadioStation {
     protected $frequency;
 
-    public function __construct(float $frequency)
-    {
+    public function __construct(float $frequency) {
         $this->frequency = $frequency;
     }
 
-    public function getFrequency(): float
-    {
+    public function getFrequency(): float {
         return $this->frequency;
     }
 }
@@ -1562,54 +1391,45 @@ Then we have our iterator
 use Countable;
 use Iterator;
 
-class StationList implements Countable, Iterator
-{
+class StationList implements Countable, Iterator {
     /** @var RadioStation[] $stations */
     protected $stations = [];
 
     /** @var int $counter */
     protected $counter;
 
-    public function addStation(RadioStation $station)
-    {
+    public function addStation(RadioStation $station) {
         $this->stations[] = $station;
     }
 
-    public function removeStation(RadioStation $toRemove)
-    {
+    public function removeStation(RadioStation $toRemove) {
         $toRemoveFrequency = $toRemove->getFrequency();
         $this->stations = array_filter($this->stations, function (RadioStation $station) use ($toRemoveFrequency) {
             return $station->getFrequency() !== $toRemoveFrequency;
         });
     }
 
-    public function count(): int
-    {
+    public function count(): int {
         return count($this->stations);
     }
 
-    public function current(): RadioStation
-    {
+    public function current(): RadioStation {
         return $this->stations[$this->counter];
     }
 
-    public function key()
-    {
+    public function key() {
         return $this->counter;
     }
 
-    public function next()
-    {
+    public function next() {
         $this->counter++;
     }
 
-    public function rewind()
-    {
+    public function rewind() {
         $this->counter = 0;
     }
 
-    public function valid(): bool
-    {
+    public function valid(): bool {
         return isset($this->stations[$this->counter]);
     }
 }
@@ -1649,16 +1469,13 @@ Here is the simplest example of a chat room (i.e. mediator) with users (i.e. col
 First of all, we have the mediator i.e. the chat room
 
 ```php
-interface ChatRoomMediator 
-{
+interface ChatRoomMediator  {
     public function showMessage(User $user, string $message);
 }
 
 // Mediator
-class ChatRoom implements ChatRoomMediator
-{
-    public function showMessage(User $user, string $message)
-    {
+class ChatRoom implements ChatRoomMediator {
+    public function showMessage(User $user, string $message) {
         $time = date('M d, y H:i');
         $sender = $user->getName();
 
@@ -1722,17 +1539,14 @@ Lets take an example of text editor which keeps saving the state from time to ti
 First of all we have our memento object that will be able to hold the editor state
 
 ```php
-class EditorMemento
-{
+class EditorMemento {
     protected $content;
 
-    public function __construct(string $content)
-    {
+    public function __construct(string $content) {
         $this->content = $content;
     }
 
-    public function getContent()
-    {
+    public function getContent() {
         return $this->content;
     }
 }
@@ -1741,27 +1555,22 @@ class EditorMemento
 Then we have our editor i.e. originator that is going to use memento object
 
 ```php
-class Editor
-{
+class Editor {
     protected $content = '';
 
-    public function type(string $words)
-    {
+    public function type(string $words) {
         $this->content = $this->content . ' ' . $words;
     }
 
-    public function getContent()
-    {
+    public function getContent() {
         return $this->content;
     }
 
-    public function save()
-    {
+    public function save() {
         return new EditorMemento($this->content);
     }
 
-    public function restore(EditorMemento $memento)
-    {
+    public function restore(EditorMemento $memento) {
         $this->content = $memento->getContent();
     }
 }
@@ -1806,32 +1615,26 @@ Wikipedia says
 
 Translating our example from above. First of all we have job seekers that need to be notified for a job posting
 ```php
-class JobPost
-{
+class JobPost {
     protected $title;
 
-    public function __construct(string $title)
-    {
+    public function __construct(string $title) {
         $this->title = $title;
     }
 
-    public function getTitle()
-    {
+    public function getTitle() {
         return $this->title;
     }
 }
 
-class JobSeeker implements Observer
-{
+class JobSeeker implements Observer {
     protected $name;
 
-    public function __construct(string $name)
-    {
+    public function __construct(string $name) {
         $this->name = $name;
     }
 
-    public function onJobPosted(JobPost $job)
-    {
+    public function onJobPosted(JobPost $job) {
         // Do something with the job posting
         echo 'Hi ' . $this->name . '! New job posted: '. $job->getTitle();
     }
@@ -1839,24 +1642,20 @@ class JobSeeker implements Observer
 ```
 Then we have our job postings to which the job seekers will subscribe
 ```php
-class EmploymentAgency implements Observable
-{
+class EmploymentAgency implements Observable {
     protected $observers = [];
 
-    protected function notify(JobPost $jobPosting)
-    {
+    protected function notify(JobPost $jobPosting) {
         foreach ($this->observers as $observer) {
             $observer->onJobPosted($jobPosting);
         }
     }
 
-    public function attach(Observer $observer)
-    {
+    public function attach(Observer $observer) {
         $this->observers[] = $observer;
     }
 
-    public function addJob(JobPost $jobPosting)
-    {
+    public function addJob(JobPost $jobPosting) {
         $this->notify($jobPosting);
     }
 }
@@ -1897,14 +1696,12 @@ Let's take an example of a zoo simulation where we have several different kinds 
 
 ```php
 // Visitee
-interface Animal
-{
+interface Animal {
     public function accept(AnimalOperation $operation);
 }
 
 // Visitor
-interface AnimalOperation
-{
+interface AnimalOperation {
     public function visitMonkey(Monkey $monkey);
     public function visitLion(Lion $lion);
     public function visitDolphin(Dolphin $dolphin);
@@ -1912,61 +1709,48 @@ interface AnimalOperation
 ```
 Then we have our implementations for the animals
 ```php
-class Monkey implements Animal
-{
-    public function shout()
-    {
+class Monkey implements Animal {
+    public function shout() {
         echo 'Ooh oo aa aa!';
     }
 
-    public function accept(AnimalOperation $operation)
-    {
+    public function accept(AnimalOperation $operation) {
         $operation->visitMonkey($this);
     }
 }
 
-class Lion implements Animal
-{
-    public function roar()
-    {
+class Lion implements Animal {
+    public function roar() {
         echo 'Roaaar!';
     }
 
-    public function accept(AnimalOperation $operation)
-    {
+    public function accept(AnimalOperation $operation) {
         $operation->visitLion($this);
     }
 }
 
-class Dolphin implements Animal
-{
-    public function speak()
-    {
+class Dolphin implements Animal {
+    public function speak() {
         echo 'Tuut tuttu tuutt!';
     }
 
-    public function accept(AnimalOperation $operation)
-    {
+    public function accept(AnimalOperation $operation) {
         $operation->visitDolphin($this);
     }
 }
 ```
 Let's implement our visitor
 ```php
-class Speak implements AnimalOperation
-{
-    public function visitMonkey(Monkey $monkey)
-    {
+class Speak implements AnimalOperation {
+    public function visitMonkey(Monkey $monkey) {
         $monkey->shout();
     }
 
-    public function visitLion(Lion $lion)
-    {
+    public function visitLion(Lion $lion) {
         $lion->roar();
     }
 
-    public function visitDolphin(Dolphin $dolphin)
-    {
+    public function visitDolphin(Dolphin $dolphin) {
         $dolphin->speak();
     }
 }
@@ -1987,20 +1771,16 @@ $dolphin->accept($speak);   // Tuut tutt tuutt!
 We could have done this simply by having an inheritance hierarchy for the animals but then we would have to modify the animals whenever we would have to add new actions to animals. But now we will not have to change them. For example, let's say we are asked to add the jump behavior to the animals, we can simply add that by creating a new visitor i.e.
 
 ```php
-class Jump implements AnimalOperation
-{
-    public function visitMonkey(Monkey $monkey)
-    {
+class Jump implements AnimalOperation {
+    public function visitMonkey(Monkey $monkey) {
         echo 'Jumped 20 feet high! on to the tree!';
     }
 
-    public function visitLion(Lion $lion)
-    {
+    public function visitLion(Lion $lion) {
         echo 'Jumped 7 feet! Back on the ground!';
     }
 
-    public function visitDolphin(Dolphin $dolphin)
-    {
+    public function visitDolphin(Dolphin $dolphin) {
         echo 'Walked on water a little and disappeared';
     }
 }
@@ -2036,15 +1816,12 @@ Wikipedia says
 Translating our example from above. First of all we have our strategy interface and different strategy implementations
 
 ```php
-interface SortStrategy
-{
+interface SortStrategy {
     public function sort(array $dataset): array;
 }
 
-class BubbleSortStrategy implements SortStrategy
-{
-    public function sort(array $dataset): array
-    {
+class BubbleSortStrategy implements SortStrategy {
+    public function sort(array $dataset): array {
         echo "Sorting using bubble sort";
 
         // Do sorting
@@ -2052,10 +1829,8 @@ class BubbleSortStrategy implements SortStrategy
     }
 }
 
-class QuickSortStrategy implements SortStrategy
-{
-    public function sort(array $dataset): array
-    {
+class QuickSortStrategy implements SortStrategy {
+    public function sort(array $dataset): array {
         echo "Sorting using quick sort";
 
         // Do sorting
@@ -2066,19 +1841,16 @@ class QuickSortStrategy implements SortStrategy
 
 And then we have our client that is going to use any strategy
 ```php
-class Sorter
-{
+class Sorter {
     protected $sorterSmall;
     protected $sorterBig;
 
-    public function __construct(SortStrategy $sorterSmall, SortStrategy $sorterBig)
-    {
+    public function __construct(SortStrategy $sorterSmall, SortStrategy $sorterBig) {
         $this->sorterSmall = $sorterSmall;
         $this->sorterBig = $sorterBig;
     }
 
-    public function sort(array $dataset): array
-    {
+    public function sort(array $dataset): array {
         if (count($dataset) > 5) {
             return $this->sorterBig->sort($dataset);
         } else {
@@ -2214,12 +1986,10 @@ Imagine we have a build tool that helps us test, lint, build, generate build rep
 
 First of all we have our base class that specifies the skeleton for the build algorithm
 ```php
-abstract class Builder
-{
+abstract class Builder {
 
     // Template method
-    final public function build()
-    {
+    final public function build() {
         $this->test();
         $this->lint();
         $this->assemble();
@@ -2236,48 +2006,38 @@ abstract class Builder
 Then we can have our implementations
 
 ```php
-class AndroidBuilder extends Builder
-{
-    public function test()
-    {
+class AndroidBuilder extends Builder {
+    public function test() {
         echo 'Running android tests';
     }
 
-    public function lint()
-    {
+    public function lint() {
         echo 'Linting the android code';
     }
 
-    public function assemble()
-    {
+    public function assemble() {
         echo 'Assembling the android build';
     }
 
-    public function deploy()
-    {
+    public function deploy() {
         echo 'Deploying android build to server';
     }
 }
 
-class IosBuilder extends Builder
-{
-    public function test()
-    {
+class IosBuilder extends Builder {
+    public function test() {
         echo 'Running ios tests';
     }
 
-    public function lint()
-    {
+    public function lint() {
         echo 'Linting the ios code';
     }
 
-    public function assemble()
-    {
+    public function assemble() {
         echo 'Assembling the ios build';
     }
 
-    public function deploy()
-    {
+    public function deploy() {
         echo 'Deploying ios build to server';
     }
 }
