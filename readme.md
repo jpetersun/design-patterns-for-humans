@@ -573,13 +573,11 @@ interface Lion {
 }
 
 class AfricanLion implements Lion {
-    public function roar() {
-    }
+    public function roar() {}
 }
 
 class AsianLion implements Lion {
-    public function roar() {
-    }
+    public function roar() {}
 }
 ```
 And hunter expects any implementation of `Lion` interface to hunt.
@@ -596,8 +594,7 @@ Now let's say we have to add a `WildDog` in our game so that hunter can hunt tha
 ```php
 // This needs to be added to the game
 class WildDog {
-    public function bark() {
-    }
+    public function bark() {}
 }
 
 // Adapter around wild dog to make it compatible with our game
